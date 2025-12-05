@@ -10,6 +10,7 @@ from app.controllers.auth import AuthController
 from app.controllers.book import BookController
 from app.controllers.category import CategoryController
 from app.controllers.loan import LoanController
+from app.controllers.review import ReviewController
 from app.controllers.user import UserController
 from app.db import sqlalchemy_plugin
 from app.security import oauth2_auth
@@ -34,6 +35,7 @@ app = Litestar(
         UserController,
         BookController,
         CategoryController,
+        ReviewController,
         LoanController,
         AuthController,
     ],
