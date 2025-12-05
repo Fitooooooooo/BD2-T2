@@ -22,7 +22,11 @@ openapi_config = OpenAPIConfig(
     ],
 )
 
-cors_config = CORSConfig(allow_origins=["http://localhost:5173"])
+cors_config = CORSConfig(
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app = Litestar(
     route_handlers=[

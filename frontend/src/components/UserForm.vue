@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { User } from '@/interfaces'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
@@ -14,8 +14,11 @@ const router = useRouter()
 const userData = ref({
     username: '',
     fullname: '',
+    password: '',
 })
 const loading = ref(false)
+
+const isCreateMode = computed(() => !props.inputUserData)
 
 watch(props, () => {
     if (props.inputUserData) {
@@ -30,6 +33,7 @@ async function saveUser() {
         emit('save-user', {
             username: userData.value.username,
             fullname: userData.value.fullname,
+            password: userData.value.password,
         } as User)
     } finally {
         loading.value = false
@@ -67,6 +71,18 @@ function cancel() {
                                 v-model="userData.fullname"
                                 label="Nombre completo"
                                 prepend-inner-icon="mdi-card-account-details"
+                                variant="outlined"
+                                color="primary"
+                                :disabled="loading"
+                                class="mb-4"
+                            ></v-text-field>
+
+                            <v-text-field
+                                v-if="isCreateMode"
+                                v-model="userData.password"
+                                label="Contraseña"
+                                type="password"
+                                prepend-inner-icon="mdi-lock"
                                 variant="outlined"
                                 color="primary"
                                 :disabled="loading"

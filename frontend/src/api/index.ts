@@ -5,13 +5,16 @@ const API_BASE_URL = "http://localhost:8000"
 
 export async function apiFetch(path: string, config: Record<string, any>) {
     const auth = useAuthStore()
-    const defaultHeaders: Record<string, string> = {}
-
+    const headers = new Headers()
     if (auth.token) {
-        defaultHeaders['Authorization'] = `Bearer ${auth.token}`
+        headers.append('Authorization', `Bearer ${auth.token}`)
+        if (config.headers) {
+            config.headers = {...headers, ...config.headers}
+        } else {
+            config.headers = headers
+        }
     }
 
-    config.headers = { ...defaultHeaders, ...config.headers }
     return await fetch(`${API_BASE_URL}${path}`, config)
 } 
 
@@ -33,9 +36,7 @@ export async function login(
 }
 
 export async function fetchUsers(): Promise<User[]> {
-    const response = await apiFetch('/users', {
-        cache: 'no-cache',
-    })
+    const response = await apiFetch('/users', {})
     return await response.json()
 }
 
@@ -58,7 +59,7 @@ export async function patchUser(
 }
 
 export async function createUser(
-    userData: Omit<User, 'id'> & { password?: string }
+    userData: User,
 ) {
     const response = await apiFetch('/users', {
         method: 'POST',

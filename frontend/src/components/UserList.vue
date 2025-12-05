@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, watch } from 'vue'
+import { ref, type Ref, onMounted } from 'vue'
 import type { User } from '@/interfaces'
 import { fetchUsers } from '@/api'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const route = useRoute()
 const users: Ref<User[]> = ref([])
 const loading = ref(false)
 const search = ref('')
@@ -35,13 +34,6 @@ async function goToEditUser(userId: number) {
 onMounted(() => {
     getUsers()
 })
-
-watch(() => route.name, (newRouteName) => {
-    if (newRouteName === 'home') {
-        console.log('Navegando a la ruta home, recargando usuarios...');
-        getUsers();
-    }
-})
 </script>
 
 <template>
@@ -60,14 +52,6 @@ watch(() => route.name, (newRouteName) => {
                             :loading="loading"
                         >
                             Recargar
-                        </v-btn>
-                        <v-btn
-                            color="success"
-                            prepend-icon="mdi-account-plus"
-                            :to="{ name: 'userCreate' }"
-                            class="ml-4"
-                        >
-                            Crear Usuario
                         </v-btn>
                     </v-card-title>
 
