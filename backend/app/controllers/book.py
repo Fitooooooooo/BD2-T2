@@ -1,6 +1,6 @@
 """Controller for Book endpoints."""
 
-from typing import Sequence
+from typing import Sequence, Any
 
 from advanced_alchemy.exceptions import DuplicateKeyError, NotFoundError
 from litestar import Controller, delete, get, patch, post
@@ -32,6 +32,31 @@ class BookController(Controller):
     async def list_books(self, books_repo: BookRepository) -> Sequence[Book]:
         """Get all books."""
         return books_repo.list()
+
+    @get("/available")
+    async def get_available_books(self, books_repo: BookRepository) -> Sequence[Book]:
+        """Get all available books (stock > 0)."""
+        return await books_repo.get_available_books()
+
+    @get("/category/{category_id:int}")
+    async def find_books_by_category(self, category_id: int, books_repo: BookRepository) -> Sequence[Book]:
+        """Find books by category ID."""
+        return await books_repo.find_by_category(category_id)
+
+    @get("/most-reviewed")
+    async def get_most_reviewed_books(self, books_repo: BookRepository) -> Sequence[Book]:
+        """Get the most reviewed books."""
+        return await books_repo.get_most_reviewed_books()
+
+    @get("/search")
+    async def search_books_by_author(self, author_name: str, books_repo: BookRepository) -> Sequence[Book]:
+        """Search books by author name."""
+        return await books_repo.search_by_author(author_name)
+
+    @patch("/{book_id:int}/stock", status_code=200)
+    async def update_book_stock(self, book_id: int, data: dict[str, Any], books_repo: BookRepository) -> Book:
+        """Update the stock of a book."""
+        return await books_repo.update_stock(book_id, data["quantity"])
 
     @get("/{id:int}")
     async def get_book(self, id: int, books_repo: BookRepository) -> Book:
