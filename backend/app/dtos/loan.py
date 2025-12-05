@@ -6,16 +6,18 @@ from app.models import Loan
 
 
 class LoanReadDTO(SQLAlchemyDTO[Loan]):
-    """DTO for reading loan data."""
+    """DTO for reading loan data, including user and book relations."""
 
-    config = SQLAlchemyDTOConfig()
+    config = SQLAlchemyDTOConfig(
+        max_nested_depth=1,
+    )
 
 
 class LoanCreateDTO(SQLAlchemyDTO[Loan]):
     """DTO for creating loans."""
 
     config = SQLAlchemyDTOConfig(
-        exclude={"id", "created_at", "updated_at", "user", "book"},
+        exclude={"id", "created_at", "updated_at", "loan_dt", "return_dt", "due_date", "fine_amount", "status"},
     )
 
 
@@ -23,6 +25,5 @@ class LoanUpdateDTO(SQLAlchemyDTO[Loan]):
     """DTO for updating loans with partial data."""
 
     config = SQLAlchemyDTOConfig(
-        exclude={"id", "created_at", "updated_at", "user", "book"},
-        partial=True,
+        include={"status"}, partial=True
     )
