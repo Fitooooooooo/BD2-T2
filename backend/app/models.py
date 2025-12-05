@@ -18,6 +18,7 @@ class User(BigIntAuditBase):
     password: Mapped[str]
 
     loans: Mapped[list["Loan"]] = relationship(back_populates="user")
+    reviews: Mapped[list["Review"]] = relationship(back_populates="user")
 
 
 class Book(BigIntAuditBase):
@@ -32,6 +33,7 @@ class Book(BigIntAuditBase):
     published_year: Mapped[int]
 
     loans: Mapped[list["Loan"]] = relationship(back_populates="book")
+    reviews: Mapped[list["Review"]] = relationship(back_populates="book")
 
     categories: Mapped[list["Category"]] = relationship(
         secondary="book_categories", back_populates="books"
@@ -49,6 +51,22 @@ class Category(BigIntAuditBase):
     books: Mapped[list["Book"]] = relationship(
         secondary="book_categories", back_populates="categories"
     )
+
+
+class Review(BigIntAuditBase):
+    """Review model for books."""
+
+    __tablename__ = "reviews"
+
+    rating: Mapped[int]
+    comment: Mapped[str]
+    review_date: Mapped[date] = mapped_column(default=datetime.today)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    book_id: Mapped[int] = mapped_column(ForeignKey("books.id"))
+
+    user: Mapped["User"] = relationship(back_populates="reviews")
+    book: Mapped["Book"] = relationship(back_populates="reviews")
+
 
 class Loan(BigIntAuditBase):
     """Loan model with audit fields."""
