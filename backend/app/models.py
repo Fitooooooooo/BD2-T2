@@ -31,6 +31,10 @@ class Book(BigIntAuditBase):
     isbn: Mapped[str] = mapped_column(unique=True)
     pages: Mapped[int]
     published_year: Mapped[int]
+    stock: Mapped[int] = mapped_column(default=1)
+    description: Mapped[str | None]
+    language: Mapped[str]
+    publisher: Mapped[str | None]
 
     loans: Mapped[list["Loan"]] = relationship(back_populates="book")
     reviews: Mapped[list["Review"]] = relationship(back_populates="book")
