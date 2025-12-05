@@ -4,8 +4,8 @@ from dataclasses import dataclass
 from datetime import date, datetime
 
 from advanced_alchemy.base import BigIntAuditBase
-from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import Column, ForeignKey, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship, MappedAsDataclass
 
 
 class User(BigIntAuditBase):
@@ -33,6 +33,22 @@ class Book(BigIntAuditBase):
 
     loans: Mapped[list["Loan"]] = relationship(back_populates="book")
 
+    categories: Mapped[list["Category"]] = relationship(
+        secondary="book_categories", back_populates="books"
+    )
+
+
+class Category(BigIntAuditBase):
+    """Category model for books."""
+
+    __tablename__ = "categories"
+
+    name: Mapped[str] = mapped_column(unique=True)
+    description: Mapped[str | None]
+
+    books: Mapped[list["Book"]] = relationship(
+        secondary="book_categories", back_populates="categories"
+    )
 
 class Loan(BigIntAuditBase):
     """Loan model with audit fields."""
@@ -47,6 +63,13 @@ class Loan(BigIntAuditBase):
     user: Mapped[User] = relationship(back_populates="loans")
     book: Mapped[Book] = relationship(back_populates="loans")
 
+
+book_categories = Table(
+    "book_categories",
+    BigIntAuditBase.metadata,
+    Column("book_id", ForeignKey("books.id"), primary_key=True),
+    Column("category_id", ForeignKey("categories.id"), primary_key=True),
+)
 
 @dataclass
 class PasswordUpdate:
