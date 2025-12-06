@@ -32,12 +32,12 @@ class LoanController(Controller):
     @get("/")
     async def list_loans(self, loans_repo: LoanRepository) -> Sequence[Loan]:
         """Get all loans."""
-        return loans_repo.list()
+        return await loans_repo.list()
 
     @get("/{id:int}")
     async def get_loan(self, id: int, loans_repo: LoanRepository) -> Loan:
         """Get a loan by ID."""
-        return loans_repo.get(id)
+        return await loans_repo.get(id)
 
     @post("/", dto=LoanCreateDTO)
     async def create_loan(
@@ -50,6 +50,7 @@ class LoanController(Controller):
         loan_data["due_date"] = date.today() + timedelta(days=14)
 
         new_loan = Loan(**loan_data)
+        return await loans_repo.add(new_loan)
 
     @patch("/{id:int}", dto=LoanUpdateDTO)
     async def update_loan(
@@ -60,7 +61,7 @@ class LoanController(Controller):
     ) -> Loan:
         """Update a loan by ID."""
         raw_obj = data.as_builtins()
-        obj = loans_repo.update(Loan(id=id, **raw_obj))
+        obj = await loans_repo.update(Loan(id=id, **raw_obj))
 
         return obj
 
@@ -106,4 +107,4 @@ class LoanController(Controller):
     @delete("/{id:int}", return_dto=None, )
     async def delete_loan(self, id: int, loans_repo: LoanRepository) -> None:
         """Delete a loan by ID."""
-        loans_repo.delete(id)
+        await loans_repo.delete(id)
