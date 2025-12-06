@@ -7,7 +7,6 @@ API de Gestión de Biblioteca con Litestar y SQLAlchemy
 - [Rodolfo Cifuentes](https://github.com/Fitooooooooo)
 - **rcifuent@umag.cl**
 
-
 ### Descripción del Proyecto y Decisiones de Diseño
 
 Este proyecto extiende una API REST base para la gestión de una biblioteca, aplicando conocimientos avanzados en el desarrollo de APIs con Litestar y SQLAlchemy.
