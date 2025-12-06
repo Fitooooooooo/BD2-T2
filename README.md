@@ -21,3 +21,14 @@ Este proyecto extiende una API REST base para la gestión de una biblioteca, apl
 *   **Migraciones con Alembic:** Cada cambio en la estructura de la base de datos fue gestionado a través de migraciones generadas con Alembic, asegurando un versionado claro y la capacidad de replicar la base de datos de forma consistente.
 
 ### Cumplimiento de Requerimientos
+
+| Requerimiento | Estado | Observación |
+| :--- | :--- | :--- |
+| 1. Crear modelo `Category` | Cumplido | Se implementó el modelo, la relación M-M, DTOs y el CRUD completo. |
+| 2. Crear modelo `Review` | Cumplido | Se implementó el modelo, DTOs y el CRUD con las validaciones de rating y límite de reseñas por usuario. |
+| 3. Actualizar modelo `Book` | Cumplido | Se añadieron los nuevos campos y se implementaron las validaciones de stock y lenguaje en los endpoints. |
+| 4. Actualizar modelo `User` | Cumplido | Se añadieron los nuevos campos, se ajustaron los DTOs para seguridad y se implementó la validación de formato de email. |
+| 5. Actualizar modelo `Loan` | Cumplido | Se añadió el `Enum` `LoanStatus` y los nuevos campos. La lógica de `due_date` se implementó en el endpoint de creación. |
+| 6. Métodos en `BookRepository` | Cumplido | Se implementaron todos los métodos solicitados y se crearon los endpoints correspondientes en el `BookController`. |
+| 7. Métodos en `LoanRepository` | Cumplido | Se implementaron todos los métodos de lógica de negocio y se crearon los endpoints específicos en el `LoanController`. |
+| 8. Base de datos inicial | Cumplido | Se creó un script `seed.py` para poblar la base de datos y se generó el respaldo `initial_data.sql` mediante `pg_dump`. |
